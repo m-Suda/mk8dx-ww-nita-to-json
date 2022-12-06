@@ -85,7 +85,7 @@ import * as fs from 'fs';
     console.log('抽出終了');
 
     console.log('書き込み開始');
-    fs.writeFileSync('./data/data.json', JSON.stringify(records));
+    fs.writeFileSync('./data/wr.json', JSON.stringify(records));
     console.log('書き込み終了');
 
     await browser.close();
