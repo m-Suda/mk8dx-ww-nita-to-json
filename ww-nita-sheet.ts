@@ -1,4 +1,8 @@
 /**
+ * スプレッドシートのURL
+ */
+export const SPREAD_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOT3PJwMcMrOE--rBPV3Vz1SUegmpmpCtP8NzMQoxHljks2JDaYQ8H1pj4Pi0i5xOmnnS3eDAxc4zY/pubhtml?gid=0&single=true';
+/**
  * trタグの増減値
  */
 export const TABLE_ROW_INCREMENT = 13;

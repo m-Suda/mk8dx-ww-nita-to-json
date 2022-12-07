@@ -4,14 +4,19 @@ import {
     FIRST_RECORD_TABLE_ROW_START,
     RANKER_RECORD_TABLE_DATA_CLASS,
     RANKER_RECORD_TABLE_ROW_START,
+    SPREAD_SHEET_URL,
     TABLE_DATA_CLASS_PREFIX,
-    TABLE_ROW_INCREMENT, TRACK_TABLE_DATA_CLASS_2ND, TRACK_TABLE_DATA_CLASS_END, TRACK_TABLE_DATA_CLASS_INCREMENT,
+    TABLE_ROW_INCREMENT,
+    TRACK_TABLE_DATA_CLASS_2ND,
+    TRACK_TABLE_DATA_CLASS_END,
+    TRACK_TABLE_DATA_CLASS_INCREMENT,
     TRACK_TABLE_DATA_CLASS_START,
     TRACK_TABLE_ROW_END,
     TRACK_TABLE_ROW_START,
 } from './ww-nita-sheet';
 import { Record } from './record';
 import * as fs from 'fs';
+import { getATagSelector, getInnerHtml, getTableDataSelector } from './page';
 
 /**
  * ワルイージ花ちゃんNITAのスプレッドシートからコース名と1, 10位のタイムを取得する
@@ -21,7 +26,7 @@ import * as fs from 'fs';
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
-    await page.goto('https://docs.google.com/spreadsheets/d/e/2PACX-1vTOT3PJwMcMrOE--rBPV3Vz1SUegmpmpCtP8NzMQoxHljks2JDaYQ8H1pj4Pi0i5xOmnnS3eDAxc4zY/pubhtml?gid=0&single=true');
+    await page.goto(SPREAD_SHEET_URL);
 
     const records: Record[] = [];
 
@@ -38,29 +43,23 @@ import * as fs from 'fs';
         console.log(trackTrPosition);
 
         const trackTd = `${TABLE_DATA_CLASS_PREFIX}${trackTdPosition}`;
-        const trackSelector = `table > tbody > tr:nth-child(${trackTrPosition}) > td.${trackTd}`;
-        const tracks = await page.$$eval(trackSelector, tracks => {
-            return tracks.map(({ innerHTML }) => innerHTML);
-        });
+        const trackSelector = getTableDataSelector(trackTdPosition, trackTd);
+        const tracks = await getInnerHtml(page, trackSelector);
         console.log(tracks);
 
-        const firstRecordSelector = `table > tbody > tr:nth-child(${firstRecordTrPosition}) > td.${FIRST_RECORD_TABLE_DATA_CLASS} > a`;
-        const firstRecords = await page.$$eval(firstRecordSelector, firstRecords => {
-            return firstRecords.map(({ innerHTML }) => innerHTML);
-        });
+        const firstRecordSelector = getATagSelector(firstRecordTrPosition, FIRST_RECORD_TABLE_DATA_CLASS);
+        const firstRecords = await getInnerHtml(page, firstRecordSelector);
         console.log(firstRecords);
 
-        const rankerRecordSelector = `table > tbody > tr:nth-child(${rankerRecordTrPosition}) > td.${RANKER_RECORD_TABLE_DATA_CLASS} > a`;
-        const rankerRecords = await page.$$eval(rankerRecordSelector, rankerRecords => {
-            return rankerRecords.map(({ innerHTML }) => innerHTML);
-        });
+        const rankerRecordSelector = getATagSelector(rankerRecordTrPosition, RANKER_RECORD_TABLE_DATA_CLASS);
+        const rankerRecords = await getInnerHtml(page, rankerRecordSelector);
         console.log(rankerRecords);
 
         const record: Record[] = tracks.map((track, i) => {
             return {
                 track,
                 firstRecord: firstRecords[i],
-                rankerRecord: rankerRecords[i]
+                rankerRecord: rankerRecords[i],
             };
         });
         console.log(record);
