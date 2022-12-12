@@ -40,10 +40,9 @@ import { getATagSelector, getInnerHtml, getTableDataSelector } from './page';
         trackTrPosition <= TRACK_TABLE_ROW_END;
         trackTrPosition += TABLE_ROW_INCREMENT
     ) {
-        console.log(trackTrPosition);
-
         const trackTd = `${TABLE_DATA_CLASS_PREFIX}${trackTdPosition}`;
-        const trackSelector = getTableDataSelector(trackTdPosition, trackTd);
+        const trackSelector = getTableDataSelector(trackTrPosition, trackTd);
+        console.log(trackSelector);
         const tracks = await getInnerHtml(page, trackSelector);
         console.log(tracks);
 
