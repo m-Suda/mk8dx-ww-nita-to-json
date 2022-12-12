@@ -10,7 +10,7 @@ export const TABLE_ROW_INCREMENT = 13;
  * コースのセルがあるtrタグの開始、終了位置
  */
 export const TRACK_TABLE_ROW_START = 8;
-export const TRACK_TABLE_ROW_END = 203;
+export const TRACK_TABLE_ROW_END = 229;
 /**
  * 1stの記録があるtrタグの開始、終了位置
  */
