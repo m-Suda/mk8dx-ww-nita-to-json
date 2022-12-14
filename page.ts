@@ -24,8 +24,22 @@ export function getATagSelector(nthChildPosition: number, tdClass: string): stri
  * @param page
  * @param selector
  */
-export async function getInnerHtml(page: Page, selector: string): Promise<string[]> {
+export async function getText(page: Page, selector: string): Promise<string[]> {
     return await page.$$eval(selector, elements => {
         return elements.map(({ innerHTML }) => innerHTML);
+    });
+}
+
+/**
+ * 指定されたセレクターのInnerHtmlとlinkを取得する
+ * @param page
+ * @param selector
+ */
+export async function getTextAndLink(page: Page, selector: string): Promise<{ record: string, link: string }[]> {
+    return await page.$$eval(selector, elements => {
+        return elements.map(element => {
+            const { innerHTML: record, href: link } = element as HTMLAnchorElement;
+            return { record, link };
+        });
     });
 }

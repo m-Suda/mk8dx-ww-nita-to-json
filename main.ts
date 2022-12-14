@@ -16,7 +16,7 @@ import {
 } from './ww-nita-sheet';
 import { Record } from './record';
 import * as fs from 'fs';
-import { getATagSelector, getInnerHtml, getTableDataSelector } from './page';
+import { getATagSelector, getText, getTableDataSelector, getTextAndLink } from './page';
 
 /**
  * ワルイージ花ちゃんNITAのスプレッドシートからコース名と1, 10位のタイムを取得する
@@ -43,21 +43,23 @@ import { getATagSelector, getInnerHtml, getTableDataSelector } from './page';
         const trackTd = `${TABLE_DATA_CLASS_PREFIX}${trackTdPosition}`;
         const trackSelector = getTableDataSelector(trackTrPosition, trackTd);
         console.log(trackSelector);
-        const tracks = await getInnerHtml(page, trackSelector);
+        const tracks = await getText(page, trackSelector);
         console.log(tracks);
 
         const firstRecordSelector = getATagSelector(firstRecordTrPosition, FIRST_RECORD_TABLE_DATA_CLASS);
-        const firstRecords = await getInnerHtml(page, firstRecordSelector);
+        const firstRecords = await getTextAndLink(page, firstRecordSelector);
         console.log(firstRecords);
 
         const rankerRecordSelector = getATagSelector(rankerRecordTrPosition, RANKER_RECORD_TABLE_DATA_CLASS);
-        const rankerRecords = await getInnerHtml(page, rankerRecordSelector);
+        const rankerRecords = await getText(page, rankerRecordSelector);
         console.log(rankerRecords);
 
         const record: Record[] = tracks.map((track, i) => {
+            const { record, link } = firstRecords[i];
             return {
                 track,
-                firstRecord: firstRecords[i],
+                firstRecord: record,
+                firstRecordUrl: link,
                 rankerRecord: rankerRecords[i],
             };
         });
