@@ -10,17 +10,17 @@ export const TABLE_ROW_INCREMENT = 13;
  * コースのセルがあるtrタグの開始、終了位置
  */
 export const TRACK_TABLE_ROW_START = 8;
-export const TRACK_TABLE_ROW_END = 229;
+export const TRACK_TABLE_ROW_END = 255;
 /**
  * 1stの記録があるtrタグの開始、終了位置
  */
 export const FIRST_RECORD_TABLE_ROW_START = 10;
-export const FIRST_RECORD_TABLE_ROW_END = 205;
+export const FIRST_RECORD_TABLE_ROW_END = 231;
 /**
  * ランカー(10th)の記録があるtrタグの開始、終了位置
  */
 export const RANKER_RECORD_TABLE_ROW_START = 19;
-export const RANKER_RECORD_TABLE_ROW_END = 214;
+export const RANKER_RECORD_TABLE_ROW_END = 240;
 
 /**
  * tdタグのPrefix
