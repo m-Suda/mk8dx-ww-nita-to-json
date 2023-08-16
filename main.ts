@@ -1,22 +1,28 @@
 import puppeteer from 'puppeteer';
 import {
-    FIRST_RECORD_TABLE_DATA_CLASS,
-    FIRST_RECORD_TABLE_ROW_START,
-    RANKER_RECORD_TABLE_DATA_CLASS,
-    RANKER_RECORD_TABLE_ROW_START,
+    FIRST_RECORD_TR_START,
+    RANKER_RECORD_TR_START,
     SPREAD_SHEET_URL,
-    TABLE_DATA_CLASS_PREFIX,
-    TABLE_ROW_INCREMENT,
-    TRACK_TABLE_DATA_CLASS_2ND,
-    TRACK_TABLE_DATA_CLASS_END,
-    TRACK_TABLE_DATA_CLASS_INCREMENT,
-    TRACK_TABLE_DATA_CLASS_START,
-    TRACK_TABLE_ROW_END,
-    TRACK_TABLE_ROW_START,
+    TR_INCREMENT,
+    TRACK_EN_TD_END,
+    TRACK_EN_TD_INCREMENT,
+    TRACK_EN_TD_START,
+    TRACK_EN_TR_END,
+    TRACK_EN_TR_START,
+    TRACK_JP_TR_START,
+    TRACK_JP_TD_INCREMENT,
+    TRACK_JP_TD_START,
+    FIRST_RECORD_TD_START,
+    RANKER_RECORD_TD_START,
+    TRACK_JP_TR_END,
+    TRACK_JP_TD_END,
+    FIRST_RECORD_TR_END,
+    FIRST_RECORD_TD_END,
+    FIRST_RECORD_TD_INCREMENT, RANKER_RECORD_TD_END, RANKER_RECORD_TD_INCREMENT, RANKER_RECORD_TR_END,
 } from './ww-nita-sheet';
 import { Record } from './record';
 import * as fs from 'fs';
-import { getATagSelector, getText, getTableDataSelector, getTextAndLink } from './page';
+import { getText, getTableDataSelector, getTextAndLink } from './page';
 
 /**
  * ワルイージ花ちゃんNITAのスプレッドシートからコース名と1, 10位のタイムを取得する
@@ -26,62 +32,66 @@ import { getATagSelector, getText, getTableDataSelector, getTextAndLink } from '
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
+    console.log('抽出開始');
+
     await page.goto(SPREAD_SHEET_URL);
 
-    const records: Record[] = [];
-
-    let trackTrPosition = TRACK_TABLE_ROW_START;
-    let trackTdPosition = TRACK_TABLE_DATA_CLASS_START;
-    let firstRecordTrPosition = FIRST_RECORD_TABLE_ROW_START;
-    let rankerRecordTrPosition = RANKER_RECORD_TABLE_ROW_START;
-    console.log('抽出開始');
-    for (
-        trackTrPosition;
-        trackTrPosition <= TRACK_TABLE_ROW_END;
-        trackTrPosition += TABLE_ROW_INCREMENT
-    ) {
-        const trackTd = `${TABLE_DATA_CLASS_PREFIX}${trackTdPosition}`;
-        const trackSelector = getTableDataSelector(trackTrPosition, trackTd);
-        console.log(trackSelector);
-        const tracks = await getText(page, trackSelector);
-        console.log(tracks);
-
-        const firstRecordSelector = getATagSelector(firstRecordTrPosition, FIRST_RECORD_TABLE_DATA_CLASS);
-        const firstRecords = await getTextAndLink(page, firstRecordSelector);
-        console.log(firstRecords);
-
-        const rankerRecordSelector = getATagSelector(rankerRecordTrPosition, RANKER_RECORD_TABLE_DATA_CLASS);
-        const rankerRecords = await getText(page, rankerRecordSelector);
-        console.log(rankerRecords);
-
-        const record: Record[] = tracks.map((track, i) => {
-            const { record, link } = firstRecords[i];
-            return {
-                track,
-                firstRecord: record,
-                firstRecordUrl: link,
-                rankerRecord: rankerRecords[i],
-            };
-        });
-        console.log(record);
-
-        records.push(...record);
-
-        trackTdPosition += TRACK_TABLE_DATA_CLASS_INCREMENT;
-        console.log(`trackTdPosition(after increment): ${trackTdPosition}`);
-        // コースのtdタグのクラスは24のときだけ次が39になる
-        if (trackTdPosition > TRACK_TABLE_DATA_CLASS_START && trackTdPosition < TRACK_TABLE_DATA_CLASS_2ND) {
-            console.log('24の次なので39');
-            trackTdPosition = TRACK_TABLE_DATA_CLASS_2ND;
+    // 英語版コース名の開始行、開始ポジション
+    let trackEnList: string[] = [];
+    for (let trackEnTrPos = TRACK_EN_TR_START; trackEnTrPos <= TRACK_EN_TR_END; trackEnTrPos += TR_INCREMENT) {
+        for (let trackEnTdPos = TRACK_EN_TD_START; trackEnTdPos <= TRACK_EN_TD_END; trackEnTdPos += TRACK_EN_TD_INCREMENT) {
+            const selector = getTableDataSelector(trackEnTrPos, trackEnTdPos);
+            const [track] = await getText(page, selector);
+            trackEnList.push(track);
         }
-        // コースのtdタグのクラスはs49に達するとs24になりそこからもう1周する
-        else if (trackTdPosition > TRACK_TABLE_DATA_CLASS_END) {
-            console.log('49の次は24');
-            trackTdPosition = TRACK_TABLE_DATA_CLASS_START;
-        }
-        firstRecordTrPosition += TABLE_ROW_INCREMENT;
-        rankerRecordTrPosition += TABLE_ROW_INCREMENT;
     }
+
+    // 日本語版コース名の開始行、開始ポジション
+    let trackJpList: string[] = [];
+    for (let trackJpTrPos = TRACK_JP_TR_START; trackJpTrPos <= TRACK_JP_TR_END; trackJpTrPos += TR_INCREMENT) {
+        for (let trackJpTdPos = TRACK_JP_TD_START; trackJpTdPos <= TRACK_JP_TD_END; trackJpTdPos += TRACK_JP_TD_INCREMENT) {
+            const selector = getTableDataSelector(trackJpTrPos, trackJpTdPos);
+            const [track] = await getText(page, selector);
+            trackJpList.push(track);
+        }
+    }
+
+    // 1stのレコードがある開始行、開始ポジション
+    let firstRecords: { record: string, link: string }[] = [];
+    for (let firstTrPos = FIRST_RECORD_TR_START; firstTrPos <= FIRST_RECORD_TR_END; firstTrPos += TR_INCREMENT) {
+        for (let firstTdPos = FIRST_RECORD_TD_START; firstTdPos <= FIRST_RECORD_TD_END; firstTdPos += FIRST_RECORD_TD_INCREMENT) {
+            const selector = getTableDataSelector(firstTrPos, firstTdPos);
+            const [data] = await getTextAndLink(page, `${selector} > a`);
+            firstRecords.push(data);
+        }
+    }
+
+    // 10thのレコードがある開始行、開始ポジション
+    let rankerRecords: { record: string, link: string }[] = [];
+    for (let rankerTrPos = RANKER_RECORD_TR_START; rankerTrPos <= RANKER_RECORD_TR_END; rankerTrPos += TR_INCREMENT) {
+        for (let rankerTdPos = RANKER_RECORD_TD_START; rankerTdPos <= RANKER_RECORD_TD_END; rankerTdPos += RANKER_RECORD_TD_INCREMENT) {
+            const selector = getTableDataSelector(rankerTrPos, rankerTdPos);
+            const [data] = await getTextAndLink(page, `${selector} > a`);
+            rankerRecords.push(data);
+        }
+    }
+
+    const undefinedRankerRecords = [];
+
+    const records: Record[] = trackEnList.map((trackEn, i) => {
+        // コースによっては15の記録が無いコースがあるため、その場合は確認する
+        if (!rankerRecords[i]?.record) {
+            undefinedRankerRecords.push(trackJpList[i]);
+        }
+        return {
+            trackEn,
+            trackJp: trackJpList[i],
+            firstRecord: firstRecords[i].record,
+            firstRecordUrl: firstRecords[i].link,
+            rankerRecord: rankerRecords[i]?.record ?? ''
+        };
+    });
+
     console.log('抽出終了');
 
     console.log('書き込み開始');

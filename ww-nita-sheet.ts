@@ -1,60 +1,65 @@
 /**
  * スプレッドシートのURL
  */
-export const SPREAD_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOT3PJwMcMrOE--rBPV3Vz1SUegmpmpCtP8NzMQoxHljks2JDaYQ8H1pj4Pi0i5xOmnnS3eDAxc4zY/pubhtml?gid=0&single=true';
+export const SPREAD_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBXBdqpurvBmR--bzj9RJmgr7HxAoWVZmlwmhaBK-LYf_BbXn8iAPdH-ogBtXiAwxlTkQgn45PkeRW/pubhtml?gid=406946200&single=true';
 /**
  * trタグの増減値
  */
-export const TABLE_ROW_INCREMENT = 13;
+export const TR_INCREMENT = 18;
 /**
- * コースのセルがあるtrタグの開始、終了位置
+ * コース(英語)のセルがあるtrタグの開始、終了位置
  */
-export const TRACK_TABLE_ROW_START = 8;
-export const TRACK_TABLE_ROW_END = 255;
+export const TRACK_EN_TR_START = 13;
+export const TRACK_EN_TR_END = 391;
+/**
+ * コース(日本語)のセルがあるtrタグの開始
+ */
+export const TRACK_JP_TR_START = 14;
+export const TRACK_JP_TR_END = 392;
 /**
  * 1stの記録があるtrタグの開始、終了位置
  */
-export const FIRST_RECORD_TABLE_ROW_START = 10;
-export const FIRST_RECORD_TABLE_ROW_END = 231;
+export const FIRST_RECORD_TR_START = 15;
+export const FIRST_RECORD_TR_END = 393;
 /**
  * ランカー(10th)の記録があるtrタグの開始、終了位置
  */
-export const RANKER_RECORD_TABLE_ROW_START = 19;
-export const RANKER_RECORD_TABLE_ROW_END = 240;
+export const RANKER_RECORD_TR_START = 29;
+export const RANKER_RECORD_TR_END = 407;
 
 /**
- * tdタグのPrefix
+ * コース(英語)のセルがあるtdタグの増減値
  */
-export const TABLE_DATA_CLASS_PREFIX = 's';
+export const TRACK_EN_TD_INCREMENT = 3;
 /**
- * コースのセルがあるtdタグの増減値
+ * コース(英語)のセルがあるtdタグの開始、終了位置
  */
-export const TRACK_TABLE_DATA_CLASS_INCREMENT = 1;
+export const TRACK_EN_TD_START = 4;
+export const TRACK_EN_TD_END = 13;
 /**
- * コースのセルがあるtdタグの開始、終了位置
- * ※増加値1なのは39から。
+ * コース(日本語)のセルがあるtdタグの増減値
  */
-export const TRACK_TABLE_DATA_CLASS_START = 24;
-export const TRACK_TABLE_DATA_CLASS_2ND = 39;
-export const TRACK_TABLE_DATA_CLASS_END = 49;
+export const TRACK_JP_TD_INCREMENT = 1;
 /**
- * コースのセルがあるtdタグはENDに達してからもう1周する。
- * その2周目の終わりの位置
+ * コース(日本語)のセルがあるtdタグの開始、終了位置
  */
-export const TRACK_TABLE_DATA_CLASS_FINISH = 41;
+export const TRACK_JP_TD_START = 2;
+export const TRACK_JP_TD_END = 5;
 /**
- * 1stの記録があるtdタグの位置
+ * 1stのレコードのセルがあるtdタグの増減値
  */
-export const FIRST_RECORD_POSITION = 30;
+export const FIRST_RECORD_TD_INCREMENT = 6;
 /**
- * 1stの記録があるtdタグのクラス
+ * 1stの記録があるtdタグの開始、終了位置
  */
-export const FIRST_RECORD_TABLE_DATA_CLASS = `${TABLE_DATA_CLASS_PREFIX}${FIRST_RECORD_POSITION}`;
+export const FIRST_RECORD_TD_START = 7;
+export const FIRST_RECORD_TD_END = 25;
 /**
- * ランカー(10th)の記録があるtdタグの位置
+ * 10thのレコードのセルがあるtdタグの増減値
  */
-export const RANKER_RECORD_POSITION = 38;
+export const RANKER_RECORD_TD_INCREMENT = 6;
 /**
- * ランカー(10th)の記録があるtdタグのクラス
+ * 10thの記録があるtdタグの開始、終了位置
  */
-export const RANKER_RECORD_TABLE_DATA_CLASS = `${TABLE_DATA_CLASS_PREFIX}${RANKER_RECORD_POSITION}`;
+export const RANKER_RECORD_TD_START = 7;
+export const RANKER_RECORD_TD_END = 25;
