@@ -10,22 +10,22 @@ export const TR_INCREMENT = 18;
  * コース(英語)のセルがあるtrタグの開始、終了位置
  */
 export const TRACK_EN_TR_START = 13;
-export const TRACK_EN_TR_END = 391;
+export const TRACK_EN_TR_END = 427;
 /**
  * コース(日本語)のセルがあるtrタグの開始
  */
 export const TRACK_JP_TR_START = 14;
-export const TRACK_JP_TR_END = 392;
+export const TRACK_JP_TR_END = 428;
 /**
  * 1stの記録があるtrタグの開始、終了位置
  */
 export const FIRST_RECORD_TR_START = 15;
-export const FIRST_RECORD_TR_END = 393;
+export const FIRST_RECORD_TR_END = 429;
 /**
  * ランカー(10th)の記録があるtrタグの開始、終了位置
  */
 export const RANKER_RECORD_TR_START = 29;
-export const RANKER_RECORD_TR_END = 407;
+export const RANKER_RECORD_TR_END = 443;
 
 /**
  * コース(英語)のセルがあるtdタグの増減値

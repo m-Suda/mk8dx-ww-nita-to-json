@@ -29,7 +29,7 @@ import { getText, getTableDataSelector, getTextAndLink } from './page';
  * スプレッドシートのためクラスが指定できないため
  */
 (async () => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
     console.log('抽出開始');
@@ -76,7 +76,7 @@ import { getText, getTableDataSelector, getTextAndLink } from './page';
         }
     }
 
-    const undefinedRankerRecords = [];
+    const undefinedRankerRecords: string[] = [];
 
     const records: Record[] = trackEnList.map((trackEn, i) => {
         // コースによっては15の記録が無いコースがあるため、その場合は確認する
@@ -86,9 +86,9 @@ import { getText, getTableDataSelector, getTextAndLink } from './page';
         return {
             trackEn,
             trackJp: trackJpList[i],
-            firstRecord: firstRecords[i].record,
+            firstRecord: firstRecords[i].record.replace('*', ''),
             firstRecordUrl: firstRecords[i].link,
-            rankerRecord: rankerRecords[i]?.record ?? ''
+            rankerRecord: rankerRecords[i]?.record ? rankerRecords[i]?.record.replace('*', '') : ''
         };
     });
 
@@ -97,6 +97,16 @@ import { getText, getTableDataSelector, getTextAndLink } from './page';
     console.log('書き込み開始');
     fs.writeFileSync('./data/wr.json', JSON.stringify(records));
     console.log('書き込み終了');
+
+    if (undefinedRankerRecords.length) {
+        console.log('---- 15個記録が無かったコース start ----');
+        undefinedRankerRecords.forEach(record => {
+            console.log(`・${record}`);
+        });
+        console.log('------------------------------------');
+    } else {
+        console.log('---- 15個記録が無かったコースは無し ----');
+    }
 
     await browser.close();
 })();
